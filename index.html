@@ -118,7 +118,7 @@
 							<br>
 							<h1>TIỆC BÁO HỶ</h1>
 							<div class="simply-countdown simply-countdown-one"></div>
-							<p><a href="#" class="btn btn-default btn-sm">Save the date</a></p>
+							<p id="save-date-btn"><a href="#" class="btn btn-default btn-sm">Save the date</a></p>
 							<h2>11/2/2025</h2>
 						</div>
 					</div>
@@ -615,23 +615,77 @@
 	<script src="js/main.js"></script>
 
 	<script>
-    var d = new Date(new Date().getTime() + 11 * 24 * 60 * 60 * 1000 + 16 * 3600 * 1000);
+		// var d = new Date(new Date().getTime() + 11 * 24 * 60 * 60 * 1000 + 16 * 3600 * 1000);
 
-    // default example
-    simplyCountdown('.simply-countdown-one', {
-        year: d.getFullYear(),
-        month: d.getMonth() + 1,
-        day: d.getDate()
-    });
+		// // default example
+		// simplyCountdown('.simply-countdown-one', {
+		// 	year: d.getFullYear(),
+		// 	month: d.getMonth() + 1,
+		// 	day: d.getDate()
+		// });
 
-    //jQuery example
-    $('#simply-countdown-losange').simplyCountdown({
-        year: d.getFullYear(),
-        month: d.getMonth() + 1,
-        day: d.getDate(),
-        enableUtc: false
-    });
-</script>
+		// //jQuery example
+		// $('#simply-countdown-losange').simplyCountdown({
+		// 	year: d.getFullYear(),
+		// 	month: d.getMonth() + 1,
+		// 	day: d.getDate(),
+		// 	enableUtc: false
+		// });
+
+		// Target date: February 11, 2025, 16:00
+		var targetDate = new Date(2025, 1, 11, 16, 0, 0); // Months are zero-based, so February is 1
+
+		// Default example
+		simplyCountdown('.simply-countdown-one', {
+		year: targetDate.getFullYear(),
+		month: targetDate.getMonth() + 1, // Convert back to 1-based month
+		day: targetDate.getDate(),
+		hours: targetDate.getHours(),
+		minutes: targetDate.getMinutes(),
+		seconds: targetDate.getSeconds()
+		});
+
+		// jQuery example
+		$('#simply-countdown-losange').simplyCountdown({
+		year: targetDate.getFullYear(),
+		month: targetDate.getMonth() + 1, // Convert back to 1-based month
+		day: targetDate.getDate(),
+		hours: targetDate.getHours(),
+		minutes: targetDate.getMinutes(),
+		seconds: targetDate.getSeconds(),
+		enableUtc: false
+		});
+
+		// Add Save the Date action
+        document.getElementById('save-date-btn').addEventListener('click', function () {
+            // Create .ics file content
+            const icsContent = `
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${formatToICS(targetDate)}
+DTEND:${formatToICS(new Date(2025, 1, 11, 16, 0, 0))}
+SUMMARY:Tiệc báo hỷ
+DESCRIPTION:Hoài & Hoà
+LOCATION:Fpt Mita tower
+END:VEVENT
+END:VCALENDAR
+            `.trim();
+
+            // Create a downloadable link
+            const blob = new Blob([icsContent], { type: 'text/calendar' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'event.ics';
+            link.click();
+        });
+
+        // Helper function to format date to ICS format
+        function formatToICS(date) {
+            const pad = (n) => (n < 10 ? '0' + n : n);
+            return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`;
+        }
+	</script>
 
 	</body>
 </html>
