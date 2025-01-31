@@ -76,6 +76,10 @@
 				<div class="col-xs-2">
 					<div id="fh5co-logo"><a href="index.html">Happy Wedding</a></div>
 				</div>
+				<div class="col-xs-2">
+					<!-- Button to Control Music -->
+					<button id="playButton">Play Music</button>
+				</div>
 				<!-- <div class="col-xs-10 text-right menu-1">
 					<ul>
 						<li class="active"><a href="index.html">Home</a></li>
@@ -589,6 +593,12 @@
 	<div class="gototop js-top">
 		<a href="#" class="js-gotop"><i class="icon-arrow-up"></i></a>
 	</div>
+
+	<!-- Audio Player -->
+	<audio id="audioPlayer">
+		<source src="audio/MotDoi.mp3" type="audio/mpeg">
+		Your browser does not support the audio element.
+	</audio>
 	
 	<!-- jQuery -->
 	<script src="js/jquery.min.js"></script>
@@ -685,6 +695,19 @@ END:VCALENDAR
             const pad = (n) => (n < 10 ? '0' + n : n);
             return `${date.getUTCFullYear()}${pad(date.getUTCMonth() + 1)}${pad(date.getUTCDate())}T${pad(date.getUTCHours())}${pad(date.getUTCMinutes())}${pad(date.getUTCSeconds())}Z`;
         }
+
+		const audio = document.getElementById('audioPlayer');
+		const playButton = document.getElementById('playButton');
+
+		playButton.addEventListener('click', () => {
+		if (audio.paused) {
+			audio.play();
+			playButton.textContent = 'Pause Music';
+		} else {
+			audio.pause();
+			playButton.textContent = 'Play Music';
+		}
+		});
 	</script>
 
 	</body>
